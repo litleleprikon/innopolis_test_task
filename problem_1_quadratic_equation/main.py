@@ -27,8 +27,8 @@ def discriminant(a: Decimal, b: Decimal, c: Decimal) -> Decimal:
     """
     Function, that returns descriminant of quadratic equation
     :param a: First coefficient of equation, cant be a zero
-    :param b: First coefficient of equation
-    :param c: First coefficient of equation
+    :param b: Second coefficient of equation
+    :param c: Third coefficient of equation
     :return: Discriminant
 
     -- Doctests --
@@ -47,8 +47,8 @@ def solver(a: Decimal, b: Decimal, c: Decimal) -> tuple:
     """
     Function, that returns
     :param a: First coefficient of equation, cant be a zero
-    :param b: First coefficient of equation
-    :param c: First coefficient of equation
+    :param b: Second coefficient of equation
+    :param c: Third coefficient of equation
     :return: Root of the equation
 
     -- Doctests --
