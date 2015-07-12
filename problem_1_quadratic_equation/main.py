@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 __author__ = 'litleleprikon'
 
@@ -10,15 +10,25 @@ getcontext().prec = 10
 
 
 def create_parser():
+
+    def value_type(name: str, value: str, default: float) -> Decimal:
+        if not value.replace('.', '').isdigit() or len(value.split('.')) > 2:
+            print('Argument {} must be float. This argument is set to default value {}').format(name, default)
+            return Decimal(default)
+        if name == '-a' and Decimal(value) == Decimal(0):
+            print('Argument a can\'t be a zero. Default is {}'.format(default))
+            return Decimal(default)
+        return Decimal(value)
+
     parser = argparse.ArgumentParser(description='Quadratic equation solver')
     parser.add_argument('-a', required=True, action='store',
-                        type=lambda x: Decimal(x) if str(x).replace('.', '').isdigit() else Decimal(1),
+                        type=lambda x: value_type('-a', x, 1.0),
                         dest='a', help='First coefficient of equation, cant be a zero')
     parser.add_argument('-b', action='store',
-                        type=lambda x: Decimal(x) if str(x).replace('.', '').isdigit() else Decimal(0),
+                        type=lambda x: value_type('-b', x, 0.0),
                         dest='b', help='Second coefficient of equation', default=Decimal(0))
     parser.add_argument('-c', action='store',
-                        type=lambda x: Decimal(x) if str(x).replace('.', '').isdigit() else Decimal(0),
+                        type=lambda x: value_type('-c', x, 0.0),
                         dest='c', help='Third coefficient of equation', default=Decimal(0))
     return parser.parse_args()
 
@@ -60,13 +70,10 @@ def solver(a: Decimal, b: Decimal, c: Decimal) -> tuple:
     '0.00, -2.00'
     """
     d = discriminant(a, b, c)
-    if d > 0:
+    if d >= 0:
         x1 = (-b + d**Decimal(0.5))/2*a
         x2 = (-b - d**Decimal(0.5))/2*a
         return x1, x2
-    if d == 0:
-        x = -(b/2*a)
-        return x, x
 
 
 def main():
@@ -75,7 +82,7 @@ def main():
     if solution is None:
         print('No real roots')
     else:
-        print('Root 1 is {}, root 2 is '.format(*solution))
+        print('Root 1 is {}, root 2 is {}'.format(*solution))
 
 
 if __name__ == "__main__":
